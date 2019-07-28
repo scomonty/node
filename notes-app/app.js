@@ -10,11 +10,19 @@ yargs.command({
     describe: 'add a new note',
     builder: {
         title: {
-            describe: 'Note title'
+            describe: 'Note title',
+            demandOption: true,
+            type: 'string'
+        },
+        body: {
+            describe: 'body title',
+            demandOption: true,
+            type: 'string'
         }
     },
-    handler: function(argv) {
-        console.log('adding a new note', argv)
+    //this is a function - function keyword and : removed to shorten
+    handler(argv) {
+        notes.addNote(argv.title, argv.body)
     }
 })
 
@@ -23,8 +31,15 @@ yargs.command({
 yargs.command({
     command: 'remove',
     describe: "remove a note",
-    handler: function() {
-        console.log('removing the note')
+    builder: {
+        title:{
+            describe: 'remove title',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler(argv) {
+        notes.removeNote(argv.title)
     }
 })
 
@@ -32,8 +47,14 @@ yargs.command({
 yargs.command({
     command: 'list',
     describe: 'show list of notes',
-    handler: function() {
-        console.log('here is your list')
+    builder: {
+        title:{
+            describe: 'show your list',
+            type:'string'
+        }
+    },
+    handler(argv) {
+        notes.listNotes(argv);
     }
 })
 
@@ -42,9 +63,22 @@ yargs.command({
 yargs.command({
     command: 'read',
     describe: 'show notes that have been read',
-    handler: function() {
-        console.log('hey you read this already')
+    builder: {
+        title: {
+            describe: 'show notes',
+            demandOption: true,
+            type: 'string'
+        }
+    },
+    handler(argv) {
+        notes.readNote(argv.title)
     }
 })
 
-console.log(yargs.argv)
+// instead of console.log 
+yargs.parse();
+
+//console.log(yargs.argv)
+
+//run in terminal with node app.js {command} --{builder{object}}='text'
+//example builder object == title or body
